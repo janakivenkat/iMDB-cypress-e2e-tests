@@ -31,16 +31,16 @@ export class TopShowsPage {
             });
         //verify celebrity name is selected
         
-        cy.get('@fetchedOptionValue').then((value) {
+        cy.get('@fetchedOptionValue').then((value) => {
             cy.log(value);
-            cy.get('[data-testid^="filter-menu-chip-"+'${value}']')
+            cy.get(`[data-testid^="filter-menu-chip-${value}"]`)
                 .should('contain', strCelebName)
                 .should('have.attr', 'aria-pressed', 'true');
             //close the pop up and view the photo
             cy.get('[data-testid="promptable__x"]').should('exist').click();
             cy.get('[data-testid="promptable__pc"]').should('not.exist');
             //verify url change to check if page is refreshed
-            cy.url().should('include', 'Names=' + strCelebName);
+            cy.url().should('include', 'Names=' + value);
             //photos should be displayed
             cy.get('[data-testid="section-images"]').should('exist');
         });
@@ -49,7 +49,7 @@ export class TopShowsPage {
     /*Function to click on the second image */
     fnClickSecondPhoto() {
         cy.get('[data-testid$="-img-1"]')
-            .should('exist')
+            .should('be.visible')
             .click();
         cy.get('[data-testid="media-viewer"]').should('be.visible');
     }
