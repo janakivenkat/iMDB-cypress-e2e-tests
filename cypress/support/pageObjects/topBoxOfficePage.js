@@ -2,12 +2,16 @@ export class TopBoxOfficePage {
 
     /*Function to click on the 2nd item in the top box office list */
     fnClickSecondTopBoxOfficeItem() {
-        cy.get('.ipc-title__text').contains('2.').click();
+        cy.get('.ipc-title__text')
+            .should('exist')
+            .contains('2.')
+            .click();
     }
 
     /*Function to click on the IMDB Rating */
     fnClickIMDbRatingButton() {
         cy.get('[data-testid="hero-rating-bar__aggregate-rating"]')
+            .should('exist')
             .find('[aria-label="View User Ratings"]')
             .eq(0)
             .scrollIntoView()
@@ -17,6 +21,7 @@ export class TopBoxOfficePage {
     /*Function to set 5 star rating*/
     fnSetFiveStarsRating() {
         cy.get('.ipc-starbar__rating')
+            .should('exist')
             .find('[aria-label="Rate 5"]')
             .scrollIntoView()
             .click({ force: true });

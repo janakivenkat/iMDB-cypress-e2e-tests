@@ -3,6 +3,7 @@ export class BornTodayPage {
     /*Function to fetch the current date from a text 'Birthday: 01-21' */
     fnFetchTheDate() {
         cy.get('[data-testid^="selected-input-chip-list-birthday-"]')  // Select the element
+            .should('exist')
             .invoke('text')  // Get the text content of the element
             .then((text) => {
                 const datePart = text.split(':')[1].trim();
@@ -12,7 +13,7 @@ export class BornTodayPage {
 
     /*Function to delete the default search date that appears in the page */
     fnDeleteDefaultSearch() {
-        cy.get('[data-testid^="selected-input-chip-list-birthday-"]').click();
+        cy.get('[data-testid^="selected-input-chip-list-birthday-"]').should('exist').click();
     }
 
     /*Function to set the birthdate field with yesterday date  */
@@ -37,18 +38,24 @@ export class BornTodayPage {
 
             // Return the previous date in MM-DD format
             const previousDate = `${prevMonth}-${prevDay}`;
-
-            cy.get('[data-testid="birthday-input-test-id"]').type(previousDate);
-            cy.get('[data-testid="birthday-input-test-id"]').type('{enter}');
-            cy.get('[data-testid="adv-search-get-results"]').scrollIntoView().click(); // Submit the search
+            //enter the date in birthday field
+            cy.get('[data-testid="birthday-input-test-id"]')
+                .should('exist')
+                .type(previousDate)
+                .type('{enter}');
+            cy.get('[data-testid="adv-search-get-results"]')
+                .should('exist')
+                .scrollIntoView().click(); // Submit the search
             //verify if the filter for previous date appears
-            cy.get('[data-testid^="selected-input-chip-list-birthday-"]').contains(previousDate);
+            cy.get('[data-testid^="selected-input-chip-list-birthday-"]')
+                .should('exist')
+                .contains(previousDate);
         });
     }
 
     /*Function to click on the 3rd celebrity that appears in the born yesterday list */
     fnClickThirdCelebrity() {
-        cy.get('.ipc-title-link-wrapper').eq(2).click(); // Click on the third celebrity in the list
+        cy.get('.ipc-title-link-wrapper').should('exist').eq(2).click(); // Click on the third celebrity in the list
     }
 
     /*Function to set the birthday with an year 40 years ago */
@@ -60,16 +67,24 @@ export class BornTodayPage {
         // Return the previous date in MM-DD format
         const previousMonthYear = `${year}-${prevMonth}`;
 
-        cy.get('[data-testid="birthYearMonth-start"]').type(previousMonthYear);
-        cy.get('[data-testid="birthYearMonth-start"]').type('{enter}');
-        cy.get('[data-testid="birthYearMonth-end"]').type(previousMonthYear);
-        cy.get('[data-testid="birthYearMonth-end"]').type('{enter}');
-        cy.get('[data-testid="adv-search-get-results"]').scrollIntoView().click(); // Submit the search
+        cy.get('[data-testid="birthYearMonth-start"]')
+            .should('exist')
+            .type(previousMonthYear)
+            .type('{enter}');
+        cy.get('[data-testid="birthYearMonth-end"]')
+            .should('exist')
+            .type(previousMonthYear)
+            .type('{enter}');
+        cy.get('[data-testid="adv-search-get-results"]')
+            .should('exist')
+            .scrollIntoView()
+            .click(); // Submit the search
     }
 
     /*Function to click on the first link that appears in the description */
     fnClickFirstLinkInDescription() {
-        cy.get('.ipc-html-content-inner-div')  // Select all celebrity elements
+        cy.get('.ipc-html-content-inner-div')
+            .should('exist') // Select all celebrity elements
             .first()
             .then(($text) => {
                 if ($text.find('a').length > 0) {

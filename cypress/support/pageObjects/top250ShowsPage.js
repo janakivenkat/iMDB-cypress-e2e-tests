@@ -2,31 +2,55 @@ export class TopShowsPage {
    
     /*Function to navigate to Photos section  */
     fnGoToPhotosSection() {
-        cy.get('.ipc-title__text').contains('Photos').scrollIntoView().click();
+        cy.get('.ipc-title__text')
+            .contains('Photos')
+            .should('exist')
+            .scrollIntoView()
+            .click();
     }
 
     /*Function to filter the photos with danny trejo pictures */
-    fnFilterDannyTrejoPhotos() {
-        cy.get('[data-testid="mv-gallery-button"]').click();
-        cy.get('[data-testid="image-chip-dropdown-test-id"]').click();
+    fnFilterDannyTrejoPhotos(strCelebName) {
+        let optionValue = '';
+        cy.get('[data-testid="mv-gallery-button"]').should('exist').click();
+        cy.get('[data-testid="image-chip-dropdown-test-id"]').should('exist').click();
         cy.get('[data-testid="chip-container-title-test-id"]').should('be.visible');
-        cy.get('#Person-filter-select-dropdown').select('nm0001803');
-        //verify danny trejo is selected
-        cy.get('[data-testid^="filter-menu-chip-nm0001803"]')
-            .should('contain', 'Danny Trejo')
-            .should('have.attr', 'aria-pressed', 'true');
-        //close the pop up and view the photo
-        cy.get('[data-testid="promptable__x"]').click();
-        cy.get('[data-testid="promptable__pc"]').should('not.exist');
-        cy.url().should('include', 'Names=nm0001803');
-        //photos should be displayed
-        cy.get('[data-testid="section-images"]').should('exist');
+        cy.get('#Person-filter-select-dropdown')
+            .find('option')  // Find all the option elements within the select dropdown
+            .each(($el) => {
+                // Get the text of the option and match it with the desired name
+                const optionText = $el.text();
+
+                if (optionText.includes(strCelebName)) {
+                    // If the option text matches 'celebrity name', get and log the value
+                    optionValue = $el.val();
+                    cy.log(optionValue); 
+                    cy.wrap(optionValue).as('fetchedOptionValue');
+                    cy.get('#Person-filter-select-dropdown').select(optionValue);
+                }
+            });
+        //verify celebrity name is selected
+        
+        cy.get('@fetchedOptionValue').then((value) {
+            cy.log(value);
+            cy.get('[data-testid^="filter-menu-chip-"+'${value}']')
+                .should('contain', strCelebName)
+                .should('have.attr', 'aria-pressed', 'true');
+            //close the pop up and view the photo
+            cy.get('[data-testid="promptable__x"]').should('exist').click();
+            cy.get('[data-testid="promptable__pc"]').should('not.exist');
+            //verify url change to check if page is refreshed
+            cy.url().should('include', 'Names=' + strCelebName);
+            //photos should be displayed
+            cy.get('[data-testid="section-images"]').should('exist');
+        });
     }
 
     /*Function to click on the second image */
     fnClickSecondPhoto() {
         cy.get('[data-testid$="-img-1"]')
+            .should('exist')
             .click();
-        cy.takeScreenshot('Danny Trejo 2nd pic');
+        cy.get('[data-testid="media-viewer"]').should('be.visible');
     }
 }

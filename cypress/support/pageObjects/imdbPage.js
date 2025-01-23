@@ -11,25 +11,26 @@ export class ImdbPage {
     // Ensure the consent pop-up is visible
     cy.get('[data-testid="consent-banner"]', { timeout: 10000 }).should('be.visible');
     // Click the accept button
-    cy.get('[data-testid="accept-button"]').click();
+    cy.get('[data-testid="accept-button"]').should('be.visible').click();
     // verify that consent pop up doesnt exist
     cy.get('[data-testid="consent-banner"]').should('not.exist');
   }
 
   /*Function to navigate to a particular section */
   fnNavigateToSection(strSection) {
-    cy.contains(strSection).click();
+    cy.contains(strSection).should('exist').click();
   }
 
   /*Function to search for a person name  */
   fnSearchForPerson(personName) {
-    cy.get('[id="suggestion-search"]').type(personName);
-    cy.get('button[type="submit"]').click();
+    cy.get('[id="suggestion-search"]').should('exist').type(personName);
+    cy.get('button[type="submit"]').should('exist').click();
   }
 
   /*Function to unfold upcoming section in credits section */
   fnGoToUpcomingTab() {
     cy.get('[data-testid$="-upcoming-projects"]')
+      .should('exist')
       .each(($tab) => {
         cy.wrap($tab).click(); // Click to unfold
       });
@@ -38,6 +39,7 @@ export class ImdbPage {
   /*Function to verify and click on the 1st completed tag movie  */
   fnVerifyAndClickCompletedMovie(movieTag) {
     cy.get('.ipc-metadata-list-summary-item__tc')
+      .should('exist')
       .find('ul')
       .find('a')  // Credit items in the "Upcoming" tab
       .each(($el) => {

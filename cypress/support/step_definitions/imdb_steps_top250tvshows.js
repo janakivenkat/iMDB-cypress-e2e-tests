@@ -30,11 +30,11 @@ When('I go to the Photos section', () => {
   topShowsPage.fnGoToPhotosSection();
 });
 
-When('I filter by Danny Trejo photos', () => {
-  topShowsPage.fnFilterDannyTrejoPhotos();
+When('I filter by {string} photos', (strCelebName) => {
+  topShowsPage.fnFilterDannyTrejoPhotos(strCelebName);
 });
 
 Then('I click on the 2nd photo in the list', () => {
   topShowsPage.fnClickSecondPhoto();
-  cy.get('[data-testid="media-viewer"]').should('be.visible');
+  cy.takeScreenshot('Danny Trejo 2nd pic');
 });
